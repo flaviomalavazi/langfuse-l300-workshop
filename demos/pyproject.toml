@@ -1,0 +1,14 @@
+[project]
+name = "langfuse-deep-workshop-demos"
+version = "0.1.0"
+description = "Runnable demos paired with the Langfuse Deep Workshop (Level 300)."
+requires-python = ">=3.11"
+# langfuse pinned to the v3 line — the workshop demos use APIs deprecated in v4
+# (start_as_current_span, span.update_trace). To migrate to v4, see
+# https://langfuse.com/docs/observability/sdk/upgrade-path/python-v3-to-v4
+dependencies = [
+    "langfuse>=3.0.0,<4.0.0",
+    "openai>=1.0.0",
+    "python-dotenv>=1.0.0",
+    "requests>=2.33.1",
+]
