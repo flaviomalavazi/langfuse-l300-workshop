@@ -13,6 +13,54 @@ hands-on with the same artifacts the talk demonstrates.
 
 ---
 
+## 0. Workshop structure — four labs, four AGENT.md files
+
+The four demos are organized into individual lab folders, each with its own
+step-by-step `AGENT.md`:
+
+| Lab | Folder | AGENT.md | Topic |
+| --- | ------ | -------- | ----- |
+| 1 | `lab01/` | [lab01/AGENT.md](lab01/AGENT.md) | Scores from App |
+| 2 | `lab02/` | [lab02/AGENT.md](lab02/AGENT.md) | Dataset + Experiment |
+| 3 | `lab03/` | [lab03/AGENT.md](lab03/AGENT.md) | LLM-as-a-Judge (seed traffic) |
+| 4 | `lab04/` | [lab04/AGENT.md](lab04/AGENT.md) | Annotation Queue (bulk assign) |
+
+### How to navigate the labs
+
+Each `AGENT.md` is a self-contained, step-by-step guide for that lab. When
+progressing through the workshop:
+
+1. Complete the environment check in Section 2 of this file first.
+2. When the user is ready to begin a lab, read the corresponding `AGENT.md`
+   and follow its steps, check-ins, and completion checklist.
+3. Do not start the next lab until the current lab's completion checklist
+   is satisfied.
+
+### Trigger: "start lab N"
+
+When the user says **"start lab 1"** (or "start lab 2", "start lab 3",
+"start lab 4"), respond with:
+
+> "Starting Lab N — reading `labNN/AGENT.md` now."
+
+Then load and follow the corresponding `AGENT.md` from beginning to end.
+
+### Trigger: "set up environment"
+
+When the user says "set up environment" or "help with setup", jump to
+Section 2 of this file and follow it completely before asking which lab
+to start.
+
+### Announcement after environment check
+
+After a successful environment check (Section 2), announce:
+
+> "Environment is ready. We have four labs today. Each lab builds on the
+> last — scores (Lab 1), experiments (Lab 2), LLM judge (Lab 3), and
+> annotation queue (Lab 4). Say 'start lab 1' when you're ready to begin."
+
+---
+
 ## 1. Conversation opener — ask before doing anything
 
 Before touching the environment or running any script, ask the user the
