@@ -23,7 +23,10 @@ import re
 import time
 import uuid
 
-from langfuse import get_client
+from dotenv import load_dotenv
+load_dotenv()
+
+from langfuse import get_client, propagate_attributes
 from langfuse.openai import openai  # Langfuse-instrumented OpenAI wrapper
 
 langfuse = get_client()
@@ -35,24 +38,25 @@ EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 
 def ask_assistant(question: str) -> tuple[str, str]:
     """Run one user turn inside a Langfuse trace. Returns (answer, trace_id)."""
-    with langfuse.start_as_current_span(name="assistant-turn") as span:
-        span.update_trace(
-            user_id="demo-user-123",
-            session_id=f"workshop-session-{int(time.time() // 3600)}",
-            tags=["workshop", "demo-1"],
-            input={"question": question},
-        )
+    with propagate_attributes(
+        user_id="demo-user-123",
+        session_id=f"workshop-session-{int(time.time() // 3600)}",
+        tags=["workshop", "demo-1"],
+        trace_name="assistant-turn",
+    ):
+        with langfuse.start_as_current_observation(name="assistant-turn") as span:
+            span.update(input={"question": question})
 
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "system", "content": "You are a concise support assistant."},
-                {"role": "user", "content": question},
-            ],
-        )
-        answer = response.choices[0].message.content or ""
-        span.update_trace(output={"answer": answer})
-        trace_id = langfuse.get_current_trace_id()
+            response = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {"role": "system", "content": "You are a concise support assistant."},
+                    {"role": "user", "content": question},
+                ],
+            )
+            answer = response.choices[0].message.content or ""
+            span.update(output={"answer": answer})
+            trace_id = langfuse.get_current_trace_id()
 
     return answer, trace_id
 

@@ -24,6 +24,9 @@ Run:
 
 import os
 
+from dotenv import load_dotenv
+load_dotenv()
+
 from langfuse import Evaluation, get_client
 from langfuse.openai import openai
 

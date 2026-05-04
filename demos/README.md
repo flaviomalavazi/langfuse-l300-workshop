@@ -19,13 +19,8 @@ cp .env.example .env
 $EDITOR .env      # paste your Langfuse + OpenAI keys
 ```
 
-`uv sync` reads `uv.lock` exactly — you'll get the same `langfuse 3.x`,
+`uv sync` reads `uv.lock` exactly — you'll get the same `langfuse 4.5.1`,
 `openai`, and `requests` versions everyone else in the workshop has.
-
-> **Why pinned to `langfuse>=3,<4`?** The demos use `start_as_current_span()`
-> and `span.update_trace()`, both of which are deprecated in v4. To migrate
-> these scripts to v4, follow
-> https://langfuse.com/docs/observability/sdk/upgrade-path/python-v3-to-v4
 
 ### Working with a coding agent
 
@@ -59,7 +54,7 @@ uv run 04_bulk_assign_to_queue.py    # needs LANGFUSE_QUEUE_ID from the UI
 (If you've already activated the venv with `source .venv/bin/activate`, the
 plain `python <script>.py` form works too.)
 
-## Docs references (verified 2026-04)
+## Docs references (verified 2026-05)
 
 - `langfuse.create_score()` — https://langfuse.com/docs/evaluation/evaluation-methods/scores-via-sdk
 - `dataset.run_experiment()` — https://langfuse.com/docs/evaluation/experiments/datasets (and /experiments-via-sdk)

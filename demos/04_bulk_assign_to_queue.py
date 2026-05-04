@@ -32,6 +32,9 @@ import os
 import sys
 from datetime import datetime, timedelta, timezone
 
+from dotenv import load_dotenv
+load_dotenv()
+
 import requests
 
 

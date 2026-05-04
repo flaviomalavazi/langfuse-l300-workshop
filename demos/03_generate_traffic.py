@@ -24,8 +24,13 @@ import os
 import random
 import time
 
-from langfuse import get_client
+from dotenv import load_dotenv
+load_dotenv()
+
+from langfuse import get_client, propagate_attributes
 from langfuse.openai import openai
+
+TRACE_NAME = "advanced-support-assistant"
 
 langfuse = get_client()
 client = openai.OpenAI()
@@ -57,29 +62,30 @@ QUESTIONS = [
 
 def handle_one(question: str) -> None:
     user_id = f"demo-user-{random.randint(100, 999)}"
-    with langfuse.start_as_current_span(name="support-assistant") as span:
-        span.update_trace(
-            user_id=user_id,
-            session_id=f"sess-{user_id}-{int(time.time())}",
-            tags=["workshop", "judge-demo"],
-            input={"question": question},
-        )
-        resp = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {
-                    "role": "system",
-                    "content": (
-                        "You are Acme Corp support. Answer only Acme-related "
-                        "questions. If the question is unrelated, politely "
-                        "decline."
-                    ),
-                },
-                {"role": "user", "content": question},
-            ],
-        )
-        answer = (resp.choices[0].message.content or "").strip()
-        span.update_trace(output={"answer": answer})
+    with propagate_attributes(
+        user_id=user_id,
+        session_id=f"sess-{user_id}-{int(time.time())}",
+        tags=["workshop", "judge-demo"],
+        trace_name=TRACE_NAME,
+    ):
+        with langfuse.start_as_current_observation(name=TRACE_NAME) as span:
+            span.update(input={"question": question})
+            resp = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {
+                        "role": "system",
+                        "content": (
+                            "You are Acme Corp support. Answer only Acme-related "
+                            "questions. If the question is unrelated, politely "
+                            "decline."
+                        ),
+                    },
+                    {"role": "user", "content": question},
+                ],
+            )
+            answer = (resp.choices[0].message.content or "").strip()
+            span.update(output={"answer": answer})
 
 
 def main() -> None:
