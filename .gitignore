@@ -1,6 +1,7 @@
 # Ignore raw ppt and word files
 *.pptx
 *.docx
+*_Debrief.md
 
 # Specific file
 VERIFICATION_NOTES.md
