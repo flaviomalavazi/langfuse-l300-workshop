@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "Pairwise LLM-as-a-judge workflow on Langfuse, following arxiv 2411.15594"
 requires-python = ">=3.10"
 dependencies = [
+    "anthropic>=0.100.0",
     "langfuse>=4.5.1",
     "openai>=2.35.1",
     "python-dotenv>=1.2.2",
